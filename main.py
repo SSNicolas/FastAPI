@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import requests
+import base64
 
 app = FastAPI()
 
@@ -9,8 +10,8 @@ class Item(BaseModel):
     user_id: int
     user_fname: str
     user_lname: str = None
-    user_group: str
-    subject_photo: str
+    user_group: str = None
+    subject_photo: str = None
 
 class DeleteItem(BaseModel):
     user_id: int
@@ -19,8 +20,8 @@ class WriteItem(BaseModel):
     user_id: int
     user_fname: str
     user_lname: str = None
-    user_group: str
-    subject_photo: str
+    user_group: str = None
+    subject_photo: str = None
 
 
 @app.get("/")
@@ -30,6 +31,8 @@ def read_root():
 
 @app.post("/insert/")
 def insert_user(item: Item):
+    user_photo = base64.b64decode(item.subject_photo).decode()
+    # user_photo = item.subject_photo
     payload = {
         "request": {
             "SubjectCode": item.user_id,
@@ -37,19 +40,20 @@ def insert_user(item: Item):
             "SubjectLastName": item.user_lname,
             "SubjectGroup": item.user_group,
             "SubjectActive": True,
-            "SubjectProfilePhoto": item.subject_photo,
+            "SubjectProfilePhoto": user_photo,
             "UsedImages": [
-                item.subject_photo
+                user_photo
             ],
             "Settings": {
-                "DetectionThreshold": 25,
-                "QualityThreshold": 40,
-                "MinimumFaceSize": 30
+                "DetectionThreshold": 20,
+                "QualityThreshold": 30,
+                "MinimumFaceSize": 15
             }
         }
     }
+    print(payload)
     response = requests.post(url="http://127.0.0.1:8005/BioService/v1/EnrollSubjectWithAlbum", json=payload)
-
+    print(response)
     if response.status_code == 200:
         try:
             return {"status": "success", "data": response.json()}
@@ -79,6 +83,7 @@ def delete_user(item: DeleteItem):
 
 @app.post("/write/")
 def edit_user(item: WriteItem):
+    user_photo = base64.b64decode(item.subject_photo).decode()
     payload = {
         "SubjectCode": item.user_id
     }
@@ -96,22 +101,22 @@ def edit_user(item: WriteItem):
                     "SubjectName": item.user_fname,
                     "SubjectLastName": item.user_lname,
                     "SubjectGroup": item.user_group,
-                    "SubjectActive": "true",
-                    "SubjectProfilePhoto": item.subject_photo,
+                    "SubjectActive": True,
+                    "SubjectProfilePhoto": user_photo,
                     "UsedImages": [
-                        item.subject_photo
+                        user_photo
                     ],
                     "Settings": {
-                        "DetectionThreshold": 25,
-                        "QualityThreshold": 40,
-                        "MinimumFaceSize": 30
+                        "DetectionThreshold": 20,
+                        "QualityThreshold": 30,
+                        "MinimumFaceSize": 15
                     }
                 }
             }
         }
 
         response = requests.post(url="http://127.0.0.1:8005/BioService/v1/UpdateSubjectWithAlbum", json=payload)
-        return "Sucess"
+        return f"Sucess {response}"
 
     else:
         return "User code not found"

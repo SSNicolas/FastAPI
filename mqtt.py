@@ -48,7 +48,7 @@ def create_userlog(contact_id):
     models.execute_kw(db, uid, password, 'res.partner', 'message_post', [contact_id], {
         'body': message,
         'subtype_xmlid': 'mail.mt_note'
-    })
+    }) # todo verificar a funcao de log
 
 def get_channel_id():
     channel_id = models.execute_kw(
@@ -75,6 +75,7 @@ async def process_xml(xml_data):
         bestcandidate_data = root.find('.//i:BestCandidate', namespace)
         if bestcandidate_data is not None:
             subject_code = bestcandidate_data.find('i:SubjectCode', namespace).text
+            print(subject_code)
             subject_fname = bestcandidate_data.find('i:SubjectName', namespace).text
             subject_lname = bestcandidate_data.find('i:SubjectLastName', namespace).text
             subject_group = bestcandidate_data.find('i:SubjectGroup', namespace).text
@@ -92,7 +93,7 @@ async def process_xml(xml_data):
                 )
 
             await asyncio.to_thread(create_userlog,
-                contact_id=subject_code
+                contact_id=int(subject_code)
             )
 
     except ET.ParseError as e:
