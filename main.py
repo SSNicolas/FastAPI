@@ -24,11 +24,6 @@ class WriteItem(BaseModel):
     subject_photo: str = None
 
 
-@app.get("/")
-def read_root():
-    return "Hello World"
-
-
 @app.post("/insert/")
 def insert_user(item: Item):
     user_photo = base64.b64decode(item.subject_photo).decode()

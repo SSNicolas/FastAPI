@@ -48,7 +48,7 @@ def create_userlog(contact_id):
     models.execute_kw(db, uid, password, 'res.partner', 'message_post', [contact_id], {
         'body': message,
         'subtype_xmlid': 'mail.mt_note'
-    }) # todo verificar a funcao de log
+    })
 
 def get_channel_id():
     channel_id = models.execute_kw(
@@ -59,7 +59,7 @@ def get_channel_id():
 
 def on_connect(client, userdata, flags, rc, properties):
     print(f"Conectado com código de resultado {rc}")
-    client.subscribe("herta/v1/DESKTOP-HVMPAH2/Herta/fr_sources/H26X/Source1/finished/ident")
+    client.subscribe("herta/v1/DESKTOP-HVMPAH2/Herta/fr_sources/H26X/Source1/in_progress/ident", qos=0)
 
 
 def on_message(client, userdata, msg):
@@ -105,6 +105,6 @@ client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("localhost", 1883, 60)
+client.connect("localhost", 1883, 30)
 
 client.loop_forever()
