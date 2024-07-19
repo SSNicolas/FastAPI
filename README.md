@@ -53,10 +53,10 @@ USER_ODOO=admin
 PASS_ODOO=admin
 INSERT_SUBJECT=http://127.0.0.1:8005/BioService/v1/EnrollSubjectWithAlbum
 DELETE_SUBJECT=http://127.0.0.1:8005/BioService/v1/DeleteSubjects
-HRTA_TOPIC=herta/v1/DESKTOP-HVMPAH2/Herta/fr_sources/H26X/Patriani/in_progress/ident
+HRTA_TOPIC=herta/v1/PC_NAME/Herta/fr_sources/H26X/Cam_name/in_progress/ident
 PC_IP=127.0.0.1
-CENTRALBASE_POST=https://face-recognition-engine.onrender.com/client/notify
-CENTRALBASE_GET=https://face-recognition-engine.onrender.com/client/
+CENTRALBASE_POST=https://base.onrender.com/client/notify
+CENTRALBASE_GET=https://base.onrender.com/client/
 ```
 
 ## Execução
