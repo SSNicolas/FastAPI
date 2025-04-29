@@ -1,2 +1,10 @@
 .vercel
+<<<<<<< HEAD
 .idea
+=======
+.env
+.venv
+.idea
+__pycache__/
+*.pyc
+>>>>>>> 9aa3b45c407a8f9ef15776e60d6f6321b1d4ede6
