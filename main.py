@@ -107,6 +107,9 @@ def get_channel_id():
     )
     return channel_id[0] if channel_id else None
 
+@app.get("/")
+def home_validation():
+    return "Home"
 
 @app.post("/insert/")
 def insert_user(item: InsertItem):
